@@ -524,35 +524,24 @@
 	        $navbarCollapse.toggleClass('in');
 	    });
 
-	    // Manejar clicks en todos los dropdowns
-	    jQuery('.dropdown').on('show.bs.dropdown', function () {
-	        if (window.innerWidth <= 768 && !$navbarCollapse.hasClass('in')) {
-	            $navbarCollapse.addClass('in');
-	            $navbarToggle.removeClass('collapsed');
+	    // Manejar clicks en el dropdown de idiomas
+	    jQuery('.nav-item.dropdown').on('show.bs.dropdown', function (e) {
+	        if (window.innerWidth <= 768) {
+	            e.stopPropagation();
 	        }
 	    });
 
 	    // Manejar la selección de idioma
-	    jQuery('.dropdown-menu a').on('click', function(e) {
-	        if (jQuery(this).attr('onclick') && jQuery(this).attr('onclick').includes('changeLanguage')) {
-	            e.preventDefault();
-	            e.stopPropagation();
-	            
-	            // Obtener el idioma y ejecutar el cambio
-	            var lang = jQuery(this).attr('onclick').match(/'(.+?)'/)[1];
-	            window.changeLanguage(lang);
-	            
-	            // Cerrar el dropdown
-	            jQuery(this).closest('.dropdown').removeClass('open');
-	            
-	            // En móviles, cerrar el menú principal
-	            if (window.innerWidth <= 768) {
-	                setTimeout(function() {
-	                    $navbarCollapse.removeClass('in');
-	                    $navbarToggle.addClass('collapsed');
-	                }, 200);
-	            }
-	        }
+	    jQuery('.dropdown-menu a[onclick*="changeLanguage"]').on('click', function(e) {
+	        e.preventDefault();
+	        e.stopPropagation();
+	        
+	        // Obtener el idioma y ejecutar el cambio
+	        var lang = jQuery(this).attr('onclick').match(/'(.+?)'/)[1];
+	        window.changeLanguage(lang);
+	        
+	        // Cerrar solo el dropdown de idiomas
+	        jQuery(this).closest('.dropdown').removeClass('open');
 	    });
 
 	    // Cerrar el menú al hacer clic fuera
